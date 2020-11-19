@@ -70,9 +70,9 @@ def tobs():
 @app.route('/api/v1.0/<start>') 
 def start(start=None):
 
-    tobs_only = (session.query(Measurement.tobs).filter(Measurement.date.between(start, '2017-08-23')).all())
+    tobs = (session.query(Measurement.tobs).filter(Measurement.date.between(start, '2017-08-23')).all())
     
-    tobs_df = pd.DataFrame(tobs_only)
+    tobs_df = pd.DataFrame(tobs)
 
     tavg = tobs_df["tobs"].mean()
     tmax = tobs_df["tobs"].max()
@@ -84,9 +84,9 @@ def start(start=None):
 @app.route('/api/v1.0/<start>/<end>') 
 def startend(start=None, end=None):
 
-    tobs_only = (session.query(Measurement.tobs).filter(Measurement.date.between(start, end)).all())
+    tobs = (session.query(Measurement.tobs).filter(Measurement.date.between(start, end)).all())
     
-    tobs_df = pd.DataFrame(tobs_only)
+    tobs_df = pd.DataFrame(tobs)
 
     tavg = tobs_df["tobs"].mean()
     tmax = tobs_df["tobs"].max()
