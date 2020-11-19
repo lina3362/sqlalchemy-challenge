@@ -1,11 +1,20 @@
-import datetime as dt
 import numpy as np
 import pandas as pd
-
+import datetime as dt
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
+engine = create_engine("sqlite:///Resources/hawaii.sqlite")
+
+Measurement = Base.classes.measurement
+Station = Base.classes.station
+
+session = Session(engine)
+
+Base = automap_base()
+Base.prepare(engine, reflect=True)
+
 from flask import Flask, jsonify
 app = Flask(__name__)
 
@@ -48,7 +57,7 @@ def stations():
 @app.route('/api/v1.0/tobs') 
 def tobs():  
     latestDate = dt.date(2017, 8 ,23)
-    year_ago = maxDate - dt.timedelta(days=365)
+    year_ago = latestDate - dt.timedelta(days=365)
 
     lastyear = (session.query(Measurement.tobs)
                 .filter(Measurement.station == 'USC00519281')
@@ -87,3 +96,4 @@ def startend(start=None, end=None):
 
 if __name__ == '__main__':
         app.run(debug=True)
+
